@@ -2073,5 +2073,45 @@
             }
         });
     </script>
+<script>
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+            btn.classList.add('inactive');
+        });
+
+        document.getElementById(tabId).classList.add('active');
+
+        const activeBtn = [...document.querySelectorAll('.tab-btn')]
+            .find(btn => btn.getAttribute('onclick').includes(tabId));
+
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('inactive');
+        }
+    }
+
+    function showTooltip(event) {
+        event.stopPropagation();
+        const modal = event.currentTarget.querySelector('.tooltip-modal');
+        const overlay = document.getElementById('tooltipOverlay');
+
+        if (modal) {
+            modal.classList.add('show');
+            overlay.classList.add('show');
+        }
+    }
+
+    function closeTooltip() {
+        document.querySelectorAll('.tooltip-modal').forEach(modal => {
+            modal.classList.remove('show');
+        });
+        document.getElementById('tooltipOverlay').classList.remove('show');
+    }
+</script>
 </body>
 </html>
