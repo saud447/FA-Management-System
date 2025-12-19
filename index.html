@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FA Management System - Process Flowcharts</title>
+    <style>
+        :root {
+            --color-white: rgba(255, 255, 255, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-green-500: rgba(34, 197, 94, 1);
+            --color-blue-500: rgba(59, 130, 246, 1);
+            --color-red-500: rgba(239, 68, 68, 1);
+            --color-purple-500: rgba(139, 92, 246, 1);
+
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+
+            --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --radius-base: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 24px;
+            font-family: var(--font-family-base);
+            background: linear-gradient(135deg, var(--color-background) 0%, rgba(33, 128, 141, 0.05) 100%);
+            color: var(--color-text);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            background: linear-gradient(135deg, var(--color-primary) 0%, rgba(33, 128, 141, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .tab-btn.active {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(33, 128, 141, 0.3);
+        }
+
+        .tab-btn.inactive {
+            background: white;
+            color: var(--color-text);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tab-btn.inactive:hover {
+            background: #f9fafb;
+        }
+
+        .tab-content {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            padding: 20px;
+        }
+
+        .flow-box {
+            background: white;
+            border-radius: var(--radius-lg);
+            border: 2px solid;
+            padding: 16px 20px;
+            margin: 10px 0;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            font-weight: 500;
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            line-height: 1.4;
+        }
+
+        .flow-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .flow-box.start {
+            background: linear-gradient(135deg, #dcfce7, #d1fae5);
+            border-color: var(--color-green-500);
+            font-weight: 700;
+            border-radius: 999px;
+        }
+
+        .flow-box.end {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border-color: var(--color-red-500);
+            font-weight: 700;
+            border-radius: 999px;
+        }
+
+        .flow-box.process {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-color: var(--color-blue-500);
+        }
+
+        .flow-box.decision {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-color: #eab308;
+            font-weight: 600;
+        }
+
+        .flow-box.system {
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+            border-color: var(--color-purple-500);
+        }
+
+        .arrow {
+            font-size: 20px;
+            color: var(--color-primary);
+            font-weight: 700;
+            margin: 6px 0;
+            animation: bounce 1.5s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(6px); opacity: 0.7; }
+        }
+
+        .parallel-label {
+            font-weight: 700;
+            font-size: 12px;
+            margin-bottom: 12px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .yes-label {
+            color: var(--color-green-500);
+        }
+
+        .no-label {
+            color: var(--color-red-500);
+        }
+
+        .split-flows {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin: 20px 0;
+            width: 100%;
+            align-items: flex-start;
+            padding: 0 20px;
+        }
+
+        .flow-branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .tooltip-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        .tooltip-overlay.show {
+            display: block;
+            pointer-events: auto;
+        }
+
+        .tooltip-modal {
+            position: fixed;
+            background: white;
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--color-primary);
+            padding: 32px;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            width: 500px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+
+        .tooltip-modal.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 32px;
+            cursor: pointer;
+            color: var(--color-primary);
+            transition: all 0.2s;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.2);
+            color: var(--color-text);
+        }
+
+        .tooltip-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(33, 128, 141, 0.2);
+        }
+
+        .tooltip-section {
+            margin-bottom: 20px;
+        }
+
+        .section-label {
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .tooltip-item {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            padding-left: 12px;
+            border-left: 3px solid rgba(33, 128, 141, 0.3);
+        }
+
+        .tooltip-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .pill-tm {
+            background: var(--color-blue-500);
+        }
+
+        .pill-rm {
+            background: var(--color-green-500);
+        }
+
+        .pill-fa {
+            background: #8b5cf6;
+        }
+
+        .pill-system {
+            background: var(--color-purple-500);
+        }
+
+        .pill-finance {
+            background: #f59e0b;
+        }
+
+        strong {
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .split-flows {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                padding: 0;
+            }
+
+            .flow-box {
+                max-width: 100%;
+            }
+
+            .tooltip-modal {
+                width: 95vw;
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FA Management System</h1>
+        <p class="subtitle">Process Flowcharts - Click any box for details</p>
+    </div>
+
+    <div class="tab-buttons">
+        <button class="tab-btn active" onclick="switchTab('onboarding')">Onboarding Flow</button>
+        <button class="tab-btn inactive" onclick="switchTab('distributor')">Distributor Allocation</button>
+        <button class="tab-btn inactive" onclick="switchTab('salary')">Salary Approval Flow</button>
+        <button class="tab-btn inactive" onclick="switchTab('offboarding')">FA Offboarding Flow</button>
+    </div>
+
+    <div class="tooltip-overlay" id="tooltipOverlay" onclick="closeTooltip()"></div>
+
+    <!-- ONBOARDING FLOW -->
+    <div id="onboarding" class="tab-content active">
+        <div class="flow-container">
+            <div class="flow-box start" onclick="showTooltip(event)">
+                START: FA Registration
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">Onboarding Process Start</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Objective</span>
+                        <div class="tooltip-item">• Initiate new Field Assistant registration workflow</div>
+                        <div class="tooltip-item">• Prepare for user creation in PMC system</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                TM Opens Create User Tab
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-tm">TM</span> Territory Manager Access</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Action Required</span>
+                        <div class="tooltip-item">• Log into PMC Application</div>
+                        <div class="tooltip-item">• Navigate to "Create User" tab</div>
+                        <div class="tooltip-item">• Form ready for FA data entry</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box decision" onclick="showTooltip(event)">
+                Select FA Type
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">Choose FA Category</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Sales FA (Field Job)</span>
+                        <div class="tooltip-item">• Field sales & customer acquisition</div>
+                        <div class="tooltip-item">• Variable TA/DA applicable</div>
+                        <div class="tooltip-item">• Travel allowance: ₹3/KM (capped at 2500 KM/month)</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Promotional FA (Distributor Counter)</span>
+                        <div class="tooltip-item">• Brand promotion at distributor locations</div>
+                        <div class="tooltip-item">• Fixed compensation (no variable allowance)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-flows">
+                <div class="flow-branch">
+                    <div class="parallel-label yes-label">Sales FA</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Enter Basic Details
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> Required Information</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Primary Identifiers</span>
+                                <div class="tooltip-item">• Aadhar No (Unique identifier)</div>
+                                <div class="tooltip-item">• Aadhar Photo (Mandatory)</div>
+                                <div class="tooltip-item">• Mobile No (Unique identifier)</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Additional Documents</span>
+                                <div class="tooltip-item">• PAN • Driving License • Passport Size Photo</div>
+                                <div class="tooltip-item"><strong>*No Limit on Image Size or Image Format</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box decision" onclick="showTooltip(event)">
+                        FA Exists?
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Validation Check</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">New FA (NO)</span>
+                                <div class="tooltip-item">• Create new entry in database</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Rejoinee (YES)</span>
+                                <div class="tooltip-item">• Retrieve historical record</div>
+                                <div class="tooltip-item">• Auto-fill known details</div>
+                                <div class="tooltip-item">• Reuse original FA Code</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Enter Proposed Salary
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> Salary Configuration</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Fixed Components (System-Set)</span>
+                                <div class="tooltip-item">• Basic Salary (State-wise configured)</div>
+                                <div class="tooltip-item">• Bonus • Mobile Allowance • PF & ESIC Contributions</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Variable (TM Entry Only)</span>
+                                <div class="tooltip-item">• Special Allowance (Enter amount or 0)</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Auto-Calculated</span>
+                                <div class="tooltip-item">• TA: ₹3/KM (max 2500 KM/month)</div>
+                                <div class="tooltip-item">• DA: ₹125/day (based on attendance)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Select Territory & Distributors
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> Territory & Distributor Assignment</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Territory</span>
+                                <div class="tooltip-item">• Auto-populated if TM has 1 territory</div>
+                                <div class="tooltip-item">• Dropdown selection if TM has 2+ territories</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Distributor Mapping</span>
+                                <div class="tooltip-item">• New Joinee: Select initial distributor</div>
+                                <div class="tooltip-item">• Rejoinee: Review & change if needed</div>
+                                <div class="tooltip-item">• Detailed allocation in separate module</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Submit for Approval
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> Submission Steps</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Before Submitting</span>
+                                <div class="tooltip-item">• Review all entered details</div>
+                                <div class="tooltip-item">• Verify salary breakdown</div>
+                                <div class="tooltip-item">• Confirm territory & distributor selection</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Result</span>
+                                <div class="tooltip-item">• Application moves to RM for review</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        RM Reviews & Approves
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-rm">RM</span> Regional Manager Review</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Can Modify</span>
+                                <div class="tooltip-item">• Special Allowance amount</div>
+                                <div class="tooltip-item">• Territory assignment if needed</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Action</span>
+                                <div class="tooltip-item">• Approve or return for revisions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="parallel-label no-label">Promotional FA</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Enter Basic Details
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> Required Information</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Primary Identifiers</span>
+                                <div class="tooltip-item">• Aadhar No (Unique identifier)</div>
+                                <div class="tooltip-item">• Aadhar Photo (Mandatory)</div>
+                                <div class="tooltip-item">• Mobile No (Unique identifier)</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Additional Documents</span>
+                                <div class="tooltip-item">• PAN • Driving License • Passport Photo</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box decision" onclick="showTooltip(event)">
+                        FA Exists?
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Validation Check</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">New FA (NO)</span>
+                                <div class="tooltip-item">• Create new entry in database</div>
+                                <div class="tooltip-item">• Generate new FA Code</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Rejoinee (YES)</span>
+                                <div class="tooltip-item">• Retrieve historical record</div>
+                                <div class="tooltip-item">• Auto-fill known details</div>
+                                <div class="tooltip-item">• Reuse original FA Code</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Enter Fixed Compensation
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> Salary Configuration</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Fixed Components (System-Set)</span>
+                                <div class="tooltip-item">• Basic Salary (State-wise configured)</div>
+                                <div class="tooltip-item">• Bonus • Mobile Allowance</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Monthly Compensation (TM Entry)</span>
+                                <div class="tooltip-item">• Enter Fixed Monthly Amount</div>
+                                <div class="tooltip-item">• Amount remains constant (no variable components)</div>
+                                <div class="tooltip-item">• No TA/DA for Promotional FA</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Select Territory & Distributors
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> Territory & Distributor Assignment</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Territory</span>
+                                <div class="tooltip-item">• Auto-populated if TM has 1 territory</div>
+                                <div class="tooltip-item">• Dropdown selection if TM has 2+ territories</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Distributor Mapping</span>
+                                <div class="tooltip-item">• New Joinee: Select initial distributor</div>
+                                <div class="tooltip-item">• Rejoinee: Review & change if needed</div>
+                                <div class="tooltip-item">• Detailed allocation in separate module</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Submit for Approval
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> Submission Steps</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Before Submitting</span>
+                                <div class="tooltip-item">• Review all entered details</div>
+                                <div class="tooltip-item">• Verify compensation amount</div>
+                                <div class="tooltip-item">• Confirm territory & distributor selection</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Result</span>
+                                <div class="tooltip-item">• Application moves to RM for review</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        RM Reviews & Approves
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-rm">RM</span> Regional Manager Review</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Can Modify</span>
+                                <div class="tooltip-item">• Compensation amount if required</div>
+                                <div class="tooltip-item">• Territory assignment if needed</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Action</span>
+                                <div class="tooltip-item">• Approve or return for revisions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box decision" onclick="showTooltip(event)">
+                RM Approves?
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">RM Final Decision</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If YES</span>
+                        <div class="tooltip-item">• Documents approved, move to Finance</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If NO</span>
+                        <div class="tooltip-item">• Return to TM with feedback/comments</div>
+                        <div class="tooltip-item">• TM revises and resubmits</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                Move to HO Finance
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Workflow Routing</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Automatic</span>
+                        <div class="tooltip-item">• Application sent to Finance team</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                HO Finance Reviews & Approves
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-finance">Finance</span> HO Finance Review</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Actions</span>
+                        <div class="tooltip-item">• Final review of all details</div>
+                        <div class="tooltip-item">• Verify salary calculations</div>
+                        <div class="tooltip-item">• Approve or reject application</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box decision" onclick="showTooltip(event)">
+                Finance Approves?
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">Finance Final Decision</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">For Easy Interpretation</span>
+                        <div class="tooltip-item">• This decision splits the flow into YES and NO paths</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-flows">
+                <div class="flow-branch">
+                    <div class="parallel-label yes-label">YES: Approved</div>
+                    <div class="flow-box system" onclick="showTooltip(event)">
+                        System: Activate & Configure
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Automated Activation</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">System Actions</span>
+                                <div class="tooltip-item">• Generate Employee Code (New FA)</div>
+                                <div class="tooltip-item">• Create PMC Account with credentials</div>
+                                <div class="tooltip-item">• Grant Territory Access & Permissions</div>
+                                <div class="tooltip-item">• Initialize Distributor Mapping (pending)</div>
+                                <div class="tooltip-item">• Update FA status to "Active"</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="parallel-label no-label">NO: Rejected</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Send Intimation to RM & TM
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-finance">Finance</span> Rejection</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Actions</span>
+                                <div class="tooltip-item">• Send rejection feedback to RM & TM</div>
+                                <div class="tooltip-item">• Specify reasons for rejection</div>
+                                <div class="tooltip-item">• RM can revise and resubmit</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                Send Joining Intimation
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Notifications</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">SMS/WhatsApp to FA</span>
+                        <div class="tooltip-item">• Joining details & next steps</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Email to RM & TM</span>
+                        <div class="tooltip-item">• FA Joining Intimation</div>
+                        <div class="tooltip-item">• Employee Code</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Email to Third-Party Agency</span>
+                        <div class="tooltip-item">• Documents attached during application filing</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box system" onclick="showTooltip(event)">
+                System: Check UAN Status
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> UAN Verification (Finance Requirement)</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Validation</span>
+                        <div class="tooltip-item">• Check if UAN was provided at time of joining</div>
+                        <div class="tooltip-item">• If provided: Skip UAN registration flow</div>
+                        <div class="tooltip-item">• If not provided: Trigger UAN registration workflow</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box decision" onclick="showTooltip(event)">
+                UAN Provided?
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> UAN Check</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">YES: UAN Provided</span>
+                        <div class="tooltip-item">• Records complete</div>
+                        <div class="tooltip-item">• No further action needed</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">NO: UAN Not Provided</span>
+                        <div class="tooltip-item">• Trigger registration workflow</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-flows">
+                <div class="flow-branch">
+                    <div class="parallel-label yes-label">UAN Provided</div>
+                    <div class="flow-box end" onclick="showTooltip(event)">
+                        END: Onboarding Complete
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title">Final State - Moves to Distributor Allocation Flow</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">FA Ready for Operations</span>
+                                <div class="tooltip-item">✓ Account activated</div>
+                                <div class="tooltip-item">✓ Employee Code assigned</div>
+                                <div class="tooltip-item">✓ PMC access granted</div>
+                                <div class="tooltip-item">✓ UAN registered</div>
+                                <div class="tooltip-item">⟹ Next: Distributor Allocation Module</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="parallel-label no-label">UAN Not Provided</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Within 24 Hours: Send SMS/WhatsApp to FA
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Day 0 - Initial Trigger</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">To FA</span>
+                                <div class="tooltip-item">• SMS/WhatsApp with UAN registration steps</div>
+                                <div class="tooltip-item">• Instructions to register UAN & share with TM</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">To TM</span>
+                                <div class="tooltip-item">• Task created in To-Do list</div>
+                                <div class="tooltip-item">• FA details included in task</div>
+                                <div class="tooltip-item">• Request to enter UAN once FA shares it</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        FA Registers & Shares UAN with TM
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-fa">FA</span> Action Required</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Steps</span>
+                                <div class="tooltip-item">• FA completes UAN registration</div>
+                                <div class="tooltip-item">• FA shares UAN with TM (call/message/app)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        TM Enters UAN from To-Do Task
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> UAN Entry</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Actions</span>
+                                <div class="tooltip-item">• Open To-Do task in PMC App</div>
+                                <div class="tooltip-item">• Enter UAN provided by FA</div>
+                                <div class="tooltip-item">• Submit to system</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box system" onclick="showTooltip(event)">
+                        System: Auto-Upload & Send Notification
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Automated Processing</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">On UAN Entry</span>
+                                <div class="tooltip-item">• Data automatically uploaded to records</div>
+                                <div class="tooltip-item">• Email sent to Third-Party Agency (CC: Finance)</div>
+                                <div class="tooltip-item">• UAN field marked complete</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box decision" onclick="showTooltip(event)">
+                        UAN Entered Within 3 Days?
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Deadline Check</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">YES: Within 3 Days</span>
+                                <div class="tooltip-item">• UAN successfully registered</div>
+                                <div class="tooltip-item">• Proceed to onboarding completion</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">NO: After 3 Days</span>
+                                <div class="tooltip-item">• Daily reminders triggered</div>
+                                <div class="tooltip-item">• Escalation notifications sent</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="parallel-flows" style="margin-top: 16px;">
+                        <div class="flow-branch">
+                            <div class="parallel-label yes-label">Within 3 Days</div>
+                        </div>
+                        <div class="flow-branch">
+                            <div class="parallel-label no-label">After Day 3</div>
+                            <div class="flow-box process" onclick="showTooltip(event)">
+                                Daily Reminders Sent
+                                <div class="tooltip-modal">
+                                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                                    <div class="tooltip-title"><span class="pill pill-system">System</span> Escalation</div>
+                                    <div class="tooltip-section">
+                                        <span class="section-label">Daily Notifications</span>
+                                        <div class="tooltip-item">• SMS/WhatsApp to FA (reminder)</div>
+                                        <div class="tooltip-item">• Notification to TM in PMC App</div>
+                                        <div class="tooltip-item">• Continues until UAN is entered</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arrow">↓</div>
+
+                    <div class="flow-box end" onclick="showTooltip(event)">
+                        END: Onboarding Complete
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title">Final State - Moves to Distributor Allocation Flow</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">FA Ready for Operations</span>
+                                <div class="tooltip-item">✓ Account activated</div>
+                                <div class="tooltip-item">✓ Employee Code assigned</div>
+                                <div class="tooltip-item">✓ PMC access granted</div>
+                                <div class="tooltip-item">✓ UAN registered</div>
+                                <div class="tooltip-item">⟹ Next: Distributor Allocation Module</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box end" onclick="showTooltip(event)">
+                END: Onboarding Complete
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">Final State</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">FA Ready for Operations</span>
+                        <div class="tooltip-item">✓ Account activated</div>
+                        <div class="tooltip-item">✓ Employee Code assigned</div>
+                        <div class="tooltip-item">✓ PMC access granted</div>
+                        <div class="tooltip-item">✓ Territory & distributor mapping pending allocation module</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DISTRIBUTOR ALLOCATION MODULE -->
+    <div id="distributor" class="tab-content">
+        <div class="flow-container">
+            <div class="flow-box system" onclick="showTooltip(event)">
+                NEW FA Access Created
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> New FA Initialization</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Automatic Process</span>
+                        <div class="tooltip-item">• System creates PMC access for newly joined FA</div>
+                        <div class="tooltip-item">• Prepares FA record for distributor allocation</div>
+                        <div class="tooltip-item">• Status set to "Pending Distributor Allocation"</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box start" onclick="showTooltip(event)">
+                START: Distributor Allocation
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">Allocation Trigger</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Within 24 Hours of Onboarding</span>
+                        <div class="tooltip-item">• FA account activated</div>
+                        <div class="tooltip-item">• TM receives pop-up prompt on PMC dashboard</div>
+                        <div class="tooltip-item">• Task added to TM's To-Do list</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                TM Accesses Allocation Module
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-tm">TM</span> Module Access</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Steps</span>
+                        <div class="tooltip-item">• Click pop-up notification or To-Do item</div>
+                        <div class="tooltip-item">• Opens "Distributor Allocation" tab in PMC</div>
+                        <div class="tooltip-item">• Separate from Onboarding workflow</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                View FA List with Pending Allocation
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-tm">TM</span> Dashboard View</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Two Sections</span>
+                        <div class="tooltip-item">• <strong>All FAs in Territory:</strong> Complete list of all FAs</div>
+                        <div class="tooltip-item">• <strong>Pending Allocation Section:</strong> Newly joined FAs with allocation pending</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Features</span>
+                        <div class="tooltip-item">• Filters: FA name, joining date, territory</div>
+                        <div class="tooltip-item">• Status indicator for each FA</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                Select FA & Open Allocation Form
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-tm">TM</span> FA Selection</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Actions</span>
+                        <div class="tooltip-item">• Click on FA name</div>
+                        <div class="tooltip-item">• Form displays: FA details, Territory, Available distributors</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box system" onclick="showTooltip(event)">
+                System: Sync Distributors from SAP
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Real-Time Data Integration</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Display</span>
+                        <div class="tooltip-item">• All active distributors in FA's territory</div>
+                        <div class="tooltip-item">• Show available % allocation per distributor</div>
+                        <div class="tooltip-item">• Blocked % not selectable</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Monitoring</span>
+                        <div class="tooltip-item">• Auto-detect if assigned distributor removed from SAP</div>
+                        <div class="tooltip-item">• If any distributor becomes inactive: Auto-intimation to TM and RM via Email</div>
+                        <div class="tooltip-item">• Inactive distributor is not visible in the list to select</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                TM Selects Distributors
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-tm">TM</span> Distributor Selection</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Requirements</span>
+                        <div class="tooltip-item">• Minimum: 1 distributor (mandatory)</div>
+                        <div class="tooltip-item">• Can select multiple distributors</div>
+                        <div class="tooltip-item">• Only available % shown (blocked % excluded)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                Set From-To Dates
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-tm">TM</span> Allocation Period</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">For Each Distributor</span>
+                        <div class="tooltip-item">• Enter "From Date" (allocation start)</div>
+                        <div class="tooltip-item">• Enter "To Date" (allocation end)</div>
+                        <div class="tooltip-item">• Dates modifiable anytime if assignment changes</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                Enter Customer % Allocation
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-tm">TM</span> Percentage Entry</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Rules</span>
+                        <div class="tooltip-item">• Enter % for each selected distributor</div>
+                        <div class="tooltip-item">• Cannot exceed available % for distributor</div>
+                        <div class="tooltip-item">• Real-time validation on-screen</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                Submit for Approval
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-tm">TM</span> Submission</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Before Submitting</span>
+                        <div class="tooltip-item">• Verify all distributor mappings</div>
+                        <div class="tooltip-item">• Confirm From-To dates</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                RM Reviews Allocation
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-rm">RM</span> Regional Manager Review</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Actions</span>
+                        <div class="tooltip-item">• Review distributor selection & %</div>
+                        <div class="tooltip-item">• Verify From-To dates</div>
+                        <div class="tooltip-item">• Can edit mappings if necessary</div>
+                        <div class="tooltip-item">• Approve or reject</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box decision" onclick="showTooltip(event)">
+                RM Approves?
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">RM Final Decision</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If YES</span>
+                        <div class="tooltip-item">• Block customer % allocation</div>
+                        <div class="tooltip-item">• Activate mapping</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If NO</span>
+                        <div class="tooltip-item">• Return to TM for revision</div>
+                        <div class="tooltip-item">• Allocation remains pending</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box system" onclick="showTooltip(event)">
+                System Allocate Distributor & Reserves %
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Distributor Allocation & % Reservation</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Automatic Actions</span>
+                        <div class="tooltip-item">• Reserve allocated customer % from pool</div>
+                        <div class="tooltip-item">• Mark % as "Allocated to [FA Name]"</div>
+                        <div class="tooltip-item">• Reduce available % for other FAs</div>
+                        <div class="tooltip-item">• Update FA's active distributor record</div>
+                        <div class="tooltip-item">• Sync to PMC system in real-time</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                Send Confirmation
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Notifications</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Email Recipients</span>
+                        <div class="tooltip-item">• TM: "Distributor allocation confirmed for [FA Name]"</div>
+                        <div class="tooltip-item">• RM: "FA allocation approved & customer % now active"</div>
+                        <div class="tooltip-item">• Display confirmation in PMC App</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box end" onclick="showTooltip(event)">
+                END: Allocation Active & Monitored
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">Final State</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Active Allocation</span>
+                        <div class="tooltip-item">✓ FA mapped to selected distributors</div>
+                        <div class="tooltip-item">✓ Customer % blocked & unavailable</div>
+                        <div class="tooltip-item">✓ Allocation periods active</div>
+                        <div class="tooltip-item">✓ System continuously monitors SAP changes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SALARY APPROVAL FLOW -->
+    <div id="salary" class="tab-content">
+        <div class="flow-container">
+            <div class="flow-box start" onclick="showTooltip(event)">
+                START: Monthly Salary Processing
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">Salary Cycle Begin</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Trigger</span>
+                        <div class="tooltip-item">• Begin monthly salary processing period</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box system" onclick="showTooltip(event)">
+                System Retrieves Fixed Salary
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Data Retrieval</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Actions</span>
+                        <div class="tooltip-item">• Fetch fixed salary from onboarding record</div>
+                        <div class="tooltip-item">• Verify against current FA master data</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box system" onclick="showTooltip(event)">
+                System Retrieves Travel Log
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Travel Data Retrieval</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Data Sources - Either OR</span>
+                        <div class="tooltip-item">• <strong>Odometer Tracking Module:</strong> Real-time vehicle mileage tracking</div>
+                        <div class="tooltip-item">• <strong>OR Lat-Long Distance Module:</strong> GPS-based distance calculation</div>
+                        <div class="tooltip-item">• System to check feasibility for retrieving KMs from selected source</div>
+                        <div class="tooltip-item">• Compile total distance covered throughout the month</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box system" onclick="showTooltip(event)">
+                System Validates KM Capped at Maximum 2500
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> KM Validation & Cap</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Validation</span>
+                        <div class="tooltip-item">• Retrieve total KM from travel log</div>
+                        <div class="tooltip-item">• Apply maximum cap: 2500 KM per month</div>
+                        <div class="tooltip-item">• If exceeded: Cap to 2500 KM for salary calculation</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box system" onclick="showTooltip(event)">
+                System Calculates Working Days from PMC
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Working Days Calculation</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Initial Count</span>
+                        <div class="tooltip-item">• Count all calendar days in period from PMC</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                Exclude Sundays & National Holidays
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Day Exclusions</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Exclusions Applied</span>
+                        <div class="tooltip-item">• Exclude all Sundays</div>
+                        <div class="tooltip-item">• Exclude national holidays</div>
+                        <div class="tooltip-item">• Exclude declared company holidays</div>
+                        <div class="tooltip-item">• Final working days calculated</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box system" onclick="showTooltip(event)">
+                Calculate Prorated Salary & Travel Expenses
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Salary & Travel Calculation</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Prorated Salary Formula</span>
+                        <div class="tooltip-item">• (Fixed Salary ÷ Total Days in Month) × Working Days</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Activity Threshold</span>
+                        <div class="tooltip-item">• Minimum 4 activities per day = FA marked Present</div>
+                        <div class="tooltip-item">• Days with <4 activities = Absent (no leave adjustment)</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Travel Expenses</span>
+                        <div class="tooltip-item">• Calculate: KM from Travel Log × Per-KM Rate</div>
+                        <div class="tooltip-item">• Apply maximum cap: 2500 KM per month</div>
+                        <div class="tooltip-item">• System compiles total prorated salary + travel</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box decision" onclick="showTooltip(event)">
+                NSPL Team Assignment?
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Team Type Check</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If YES: NSPL Team</span>
+                        <div class="tooltip-item">• TM can manually adjust TA amount</div>
+                        <div class="tooltip-item">• Route to TM Adjustment step</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If NO: Other Teams</span>
+                        <div class="tooltip-item">• TA passes as calculated (KMs × Rate)</div>
+                        <div class="tooltip-item">• No TM manual adjustment allowed</div>
+                        <div class="tooltip-item">• Proceed directly to PMC check</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-flows">
+                <div class="flow-branch">
+                    <div class="parallel-label yes-label">NSPL Team</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        TM Adjusts TA Amount
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> NSPL TA Adjustment</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Flexibility (NSPL Only)</span>
+                                <div class="tooltip-item">• TM can increase TA amount (+)</div>
+                                <div class="tooltip-item">• TM can decrease TA amount (-)</div>
+                                <div class="tooltip-item">• TM can keep as calculated</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Approval Note</span>
+                                <div class="tooltip-item">• Final adjusted TA included in salary report</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="parallel-label no-label">Other Teams</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        TA Calculated from Travel Log
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Auto-Calculation</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Auto Processing</span>
+                                <div class="tooltip-item">• System uses KM × Per-KM Rate</div>
+                                <div class="tooltip-item">• No TM adjustment capability</div>
+                                <div class="tooltip-item">• TA passes to salary report as calculated</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box decision" onclick="showTooltip(event)">
+                PMC Data Issue Detected?
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">PMC Data Quality Check</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If YES: Issue Found</span>
+                        <div class="tooltip-item">• TM identifies PMC data discrepancies</div>
+                        <div class="tooltip-item">• Route to PMC correction flow</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If NO: Data Valid</span>
+                        <div class="tooltip-item">• Proceed to salary report generation</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-flows">
+                <div class="flow-branch">
+                    <div class="parallel-label yes-label">PMC Issue Found</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        TM Identifies Non-Working Days
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> Issue Identification</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Actions</span>
+                                <div class="tooltip-item">• Review PMC data for discrepancies</div>
+                                <div class="tooltip-item">• Identify days affected by PMC application issue</div>
+                                <div class="tooltip-item">• Mark these days as non-working due to system error</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        TM Requests Non-Working Days Correction
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> Correction Request</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Actions</span>
+                                <div class="tooltip-item">• Submit formal request to PMC Operational Incharge</div>
+                                <div class="tooltip-item">• Specify dates affected by PMC application issue</div>
+                                <div class="tooltip-item">• Provide evidence/reason for correction request</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        PMC Operational Incharge Reviews Request
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">PMC Incharge</span> Review</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Actions</span>
+                                <div class="tooltip-item">• Review TM's correction request</div>
+                                <div class="tooltip-item">• Verify PMC application issue claim</div>
+                                <div class="tooltip-item">• Check system logs for evidence</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box decision" onclick="showTooltip(event)">
+                        PMC Incharge Approves?
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title">PMC Incharge Decision</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">If YES</span>
+                                <div class="tooltip-item">• Modify salary payable days</div>
+                                <div class="tooltip-item">• System recalculates prorated salary</div>
+                                <div class="tooltip-item">• Proceed to salary report with corrected days</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">If NO</span>
+                                <div class="tooltip-item">• Return to TM with rejection reason</div>
+                                <div class="tooltip-item">• TM can resubmit with additional evidence</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="parallel-label no-label">No Issue Found</div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                Generate Monthly Salary Report
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Report Generation</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Content</span>
+                        <div class="tooltip-item">• Total Salary = Prorated Fixed + TA (Adjusted for NSPL / Calculated for Others)</div>
+                        <div class="tooltip-item">• Detailed breakdown: Days worked, Activities tracked, TA calculation basis</div>
+                        <div class="tooltip-item">• Include PMC corrections if applied</div>
+                        <div class="tooltip-item">• Ready for RM review and approval</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                RM Reviews Salary (TA Adjusted for NSPL Only)
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-rm">RM</span> Salary Review</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Actions</span>
+                        <div class="tooltip-item">• Review generated salary report</div>
+                        <div class="tooltip-item">• For NSPL: Verify TM's adjusted TA</div>
+                        <div class="tooltip-item">• For Others: Verify calculated TA from travel log</div>
+                        <div class="tooltip-item">• Review activity-based presence (4+ activities = present)</div>
+                        <div class="tooltip-item">• Option to modify working days if justified</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box decision" onclick="showTooltip(event)">
+                RM Modifies Days Worked?
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">RM Decision</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If YES</span>
+                        <div class="tooltip-item">• Update working days with remarks</div>
+                        <div class="tooltip-item">• Check if adjustment exceeds 4 days (requires escalation)</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If NO</span>
+                        <div class="tooltip-item">• Proceed with calculated days</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                RM Updates Days Worked with Remarks
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-rm">RM</span> Days Modification</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Actions</span>
+                        <div class="tooltip-item">• Modify number of days paid with justification</div>
+                        <div class="tooltip-item">• Add remarks for non-working days reason</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box decision" onclick="showTooltip(event)">
+                RM Approved >4 Non-Working Days?
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-rm">RM</span> Escalation Check</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If YES (>4 Days)</span>
+                        <div class="tooltip-item">• Route to SBU Head for approval</div>
+                        <div class="tooltip-item">• Exception handling required</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If NO (≤4 Days)</span>
+                        <div class="tooltip-item">• Proceed to RM final approval</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-flows">
+                <div class="flow-branch">
+                    <div class="parallel-label yes-label">YES: >4 Days</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        SBU Head Reviews Exception
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">SBU</span> Exception Review</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Actions</span>
+                                <div class="tooltip-item">• Review >4 days non-working exception</div>
+                                <div class="tooltip-item">• Review RM remarks & justification</div>
+                                <div class="tooltip-item">• Approve or reject exception</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box decision" onclick="showTooltip(event)">
+                        SBU Approves Exception?
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title">SBU Decision</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">If YES</span>
+                                <div class="tooltip-item">• Exception approved</div>
+                                <div class="tooltip-item">• Proceed to RM final approval</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">If NO</span>
+                                <div class="tooltip-item">• Return to RM for revision</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="parallel-label no-label">NO: ≤4 Days</div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                RM Approves Salary
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-rm">RM</span> Final Approval</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Actions</span>
+                        <div class="tooltip-item">• Final review of all details</div>
+                        <div class="tooltip-item">• Verify TA amount approved</div>
+                        <div class="tooltip-item">• Verify working days finalized</div>
+                        <div class="tooltip-item">• Approve salary for submission to Finance</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                Move to HO Finance
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Workflow Routing</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Actions</span>
+                        <div class="tooltip-item">• Send approved salary to Finance</div>
+                        <div class="tooltip-item">• Notify Finance team of submission</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                HO Finance Final Review
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-finance">Finance</span> Final Review</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Actions</span>
+                        <div class="tooltip-item">• Comprehensive review of salary details</div>
+                        <div class="tooltip-item">• Verify compliance with financial policies</div>
+                        <div class="tooltip-item">• Check for anomalies or discrepancies</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box decision" onclick="showTooltip(event)">
+                Finance Approves?
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">Finance Final Decision</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If YES</span>
+                        <div class="tooltip-item">• Submit to payroll for processing</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">If NO</span>
+                        <div class="tooltip-item">• Return to RM with detailed comments</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                Submit to Payroll
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Submission</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Actions</span>
+                        <div class="tooltip-item">• Send salary data to payroll system</div>
+                        <div class="tooltip-item">• Lock record to prevent modifications</div>
+                        <div class="tooltip-item">• Prepare for payment processing</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box process" onclick="showTooltip(event)">
+                Process Payment
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title"><span class="pill pill-system">System</span> Payment Processing</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Actions</span>
+                        <div class="tooltip-item">• Generate payment file for bank</div>
+                        <div class="tooltip-item">• Process salary transfer</div>
+                        <div class="tooltip-item">• Send payment confirmation to FA</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box end" onclick="showTooltip(event)">
+                END: Payment Completed
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">Final State</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Salary Processed</span>
+                        <div class="tooltip-item">✓ Salary processed and paid</div>
+                        <div class="tooltip-item">✓ Records updated in system</div>
+                        <div class="tooltip-item">✓ Payment confirmation sent to FA</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FA OFFBOARDING FLOW -->
+    <div id="offboarding" class="tab-content">
+        <div class="flow-container">
+            <div class="flow-box start" onclick="showTooltip(event)">
+                START: FA Offboarding
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">Offboarding Initiated</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">Trigger</span>
+                        <div class="tooltip-item">• FA lifecycle termination process begins</div>
+                        <div class="tooltip-item">• Two paths: Proactive or Reactive</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="flow-box decision" onclick="showTooltip(event)">
+                Trigger Type?
+                <div class="tooltip-modal">
+                    <button class="close-btn" onclick="closeTooltip()">✕</button>
+                    <div class="tooltip-title">Offboarding Type</div>
+                    <div class="tooltip-section">
+                        <span class="section-label">PROACTIVE</span>
+                        <div class="tooltip-item">• Planned termination via FA Management</div>
+                        <div class="tooltip-item">• TM/RM manually initiates deactivation</div>
+                    </div>
+                    <div class="tooltip-section">
+                        <span class="section-label">REACTIVE</span>
+                        <div class="tooltip-item">• Auto-deactivation due to inactivity</div>
+                        <div class="tooltip-item">• After 8 consecutive days of no activity</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-flows">
+                <div class="flow-branch">
+                    <div class="parallel-label yes-label">PROACTIVE PATH</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        TM/RM Opens FA Management
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM/RM</span> Module Access</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Display</span>
+                                <div class="tooltip-item">• TM sees: FAs in their territory</div>
+                                <div class="tooltip-item">• RM sees: FAs in their region</div>
+                                <div class="tooltip-item">• Option to deactivate selected FA</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Select FA & Last Working Day
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM/RM</span> Deactivation Input</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Actions</span>
+                                <div class="tooltip-item">• Select FA from list</div>
+                                <div class="tooltip-item">• Enter Last Working Day</div>
+                                <div class="tooltip-item">• Review FA details before confirmation</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Click Deactivate Button
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Confirmation</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Action</span>
+                                <div class="tooltip-item">• Final confirmation required</div>
+                                <div class="tooltip-item">• Click "Deactivate" to proceed</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box system" onclick="showTooltip(event)">
+                        System Deactivates PMC Access
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Deactivation</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Actions</span>
+                                <div class="tooltip-item">• Immediately revoke PMC access</div>
+                                <div class="tooltip-item">• Block FA account</div>
+                                <div class="tooltip-item">• Terminate all active sessions</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        Send Deactivation Email
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Notifications</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Recipients</span>
+                                <div class="tooltip-item">• RM • Third-Party Agency • Finance</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Content</span>
+                                <div class="tooltip-item">• FA [Name] - Account Deactivated</div>
+                                <div class="tooltip-item">• Last working day & final salary info</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box end" onclick="showTooltip(event)">
+                        END: Deactivation Complete
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title">Final State</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Completed</span>
+                                <div class="tooltip-item">✓ Account deactivated</div>
+                                <div class="tooltip-item">✓ Access permanently blocked</div>
+                                <div class="tooltip-item">✓ Records archived with exit date</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-branch">
+                    <div class="parallel-label no-label">REACTIVE PATH</div>
+                    <div class="flow-box system" onclick="showTooltip(event)">
+                        FA Inactive 8 Days
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Monitoring</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Trigger</span>
+                                <div class="tooltip-item">• No activity on PMC for 8 consecutive days</div>
+                                <div class="tooltip-item">• System triggers offboarding workflow</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        SMS Reminders Sent
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Escalation</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Timeline</span>
+                                <div class="tooltip-item">• Days 1-4: Daily SMS to FA</div>
+                                <div class="tooltip-item">• Day 5: SMS to TM</div>
+                                <div class="tooltip-item">• Day 7: SMS to RM</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box system" onclick="showTooltip(event)">
+                        Auto Deactivate & Show Pop-up
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Automatic Enforcement</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">After 8 Days</span>
+                                <div class="tooltip-item">• FA access removed from PMC</div>
+                                <div class="tooltip-item">• TM gets Pop-up: "Resigned or Still Working?"</div>
+                                <div class="tooltip-item">• If no response in 24h: Blocker screen</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box decision" onclick="showTooltip(event)">
+                        TM Decision
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-tm">TM</span> Status Selection</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Resigned</span>
+                                <div class="tooltip-item">• Mark FA as resigned</div>
+                                <div class="tooltip-item">• Auto email sent to RM, Finance, Third-Party</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Still Working</span>
+                                <div class="tooltip-item">• Route to RM for verification</div>
+                                <div class="tooltip-item">• Investigate tech issues or inactivity reason</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box process" onclick="showTooltip(event)">
+                        RM Verification & Investigation
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-rm">RM</span> Investigation</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Actions</span>
+                                <div class="tooltip-item">• Review inactivity reason</div>
+                                <div class="tooltip-item">• Route to PMC team for investigation</div>
+                                <div class="tooltip-item">• Check for tech issues or app problems</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box decision" onclick="showTooltip(event)">
+                        Tech Issue Found?
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title">PMC Investigation Result</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">YES: Tech Issue</span>
+                                <div class="tooltip-item">• Mark dates in attendance</div>
+                                <div class="tooltip-item">• Reactivate (No salary deduction)</div>
+                            </div>
+                            <div class="tooltip-section">
+                                <span class="section-label">NO: No Tech Issue</span>
+                                <div class="tooltip-item">• Reactivate with warning</div>
+                                <div class="tooltip-item">• May lead to salary deductions</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box system" onclick="showTooltip(event)">
+                        System Reactivates Account
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title"><span class="pill pill-system">System</span> Account Restoration</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Actions</span>
+                                <div class="tooltip-item">• FA account reactivated</div>
+                                <div class="tooltip-item">• Full PMC functionality restored</div>
+                                <div class="tooltip-item">• Notification sent to FA</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box end" onclick="showTooltip(event)">
+                        END: FA Reactivated
+                        <div class="tooltip-modal">
+                            <button class="close-btn" onclick="closeTooltip()">✕</button>
+                            <div class="tooltip-title">Final State</div>
+                            <div class="tooltip-section">
+                                <span class="section-label">Status</span>
+                                <div class="tooltip-item">✓ Account active & accessible</div>
+                                <div class="tooltip-item">✓ Full PMC functionality restored</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('inactive');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            event.target.classList.remove('inactive');
+        }
+
+        function showTooltip(event) {
+            event.stopPropagation();
+            closeTooltip();
+
+            const node = event.currentTarget;
+            const modal = node.querySelector('.tooltip-modal');
+            const overlay = document.getElementById('tooltipOverlay');
+
+            if (modal) {
+                modal.classList.add('show');
+                overlay.classList.add('show');
+            }
+        }
+
+        function closeTooltip() {
+            const allModals = document.querySelectorAll('.tooltip-modal');
+            const overlay = document.getElementById('tooltipOverlay');
+
+            allModals.forEach(modal => {
+                modal.classList.remove('show');
+            });
+            overlay.classList.remove('show');
+        }
+
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.flow-box') && !event.target.closest('.tooltip-modal')) {
+                closeTooltip();
+            }
+        });
+    </script>
+<script>
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+            btn.classList.add('inactive');
+        });
+
+        document.getElementById(tabId).classList.add('active');
+
+        const activeBtn = [...document.querySelectorAll('.tab-btn')]
+            .find(btn => btn.getAttribute('onclick').includes(tabId));
+
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('inactive');
+        }
+    }
+
+    function showTooltip(event) {
+        event.stopPropagation();
+        const modal = event.currentTarget.querySelector('.tooltip-modal');
+        const overlay = document.getElementById('tooltipOverlay');
+
+        if (modal) {
+            modal.classList.add('show');
+            overlay.classList.add('show');
+        }
+    }
+
+    function closeTooltip() {
+        document.querySelectorAll('.tooltip-modal').forEach(modal => {
+            modal.classList.remove('show');
+        });
+        document.getElementById('tooltipOverlay').classList.remove('show');
+    }
+</script>
+</body>
+</html>
